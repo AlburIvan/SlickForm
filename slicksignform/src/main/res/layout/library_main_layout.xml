@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/slick_form_field_container"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:padding="4dp"
+        android:background="@drawable/background_border"
+        android:visibility="gone">
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/slick_form_submit_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:background="@color/colorPurple"
+        android:text="@string/slick_form_button_text"
+        android:textSize="18sp"
+        android:textColor="@color/colorWhite"
+        android:textStyle="normal"
+        style="?borderlessButtonStyle" />
+
+    <ProgressBar
+        android:id="@+id/slick_form_progress"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@color/colorPurple"
+        android:indeterminate="false"
+        android:max="100"
+        android:progressDrawable="@drawable/green_progress_bar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:visibility="gone" />
+</LinearLayout>

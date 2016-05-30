@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#F9F9F9</color>
+    <color name="colorPurple">#3F51B5</color>
+    <color name="colorRed">#FF5252</color>
+    <color name="colorGreen">#69F0AE</color>
+    <color name="colorGrey">#BDBDBD</color>
+
+
+    <color name="simpletooltip_background">@color/colorRed</color>
+    <color name="simpletooltip_text">@android:color/white</color>
+    <color name="simpletooltip_arrow">@color/colorRed</color>
+</resources>

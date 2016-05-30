@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SlickSignForm</string>
+    <string name="slick_form_button_text">Sign up</string>
+    <string name="form_field_username">Username</string>
+    <string name="form_field_password">Password</string>
+    <string name="form_field_email">Email</string>
+    <string name="form_field_submit">Submit</string>
+    <string name="form_field_progress">Logging in...</string>
+    <string name="form_field_button_text">Next</string>
+</resources>

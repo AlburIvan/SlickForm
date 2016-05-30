@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/slick_form_text_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:paddingStart="2dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="13dp"
+        android:paddingBottom="10dp"
+        android:background="@color/colorWhite"
+        android:src="@drawable/show_gas_report" />
+
+    <EditText
+        android:id="@+id/slick_form_text_input"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingRight="30dp"
+        android:paddingEnd="30dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_toRightOf="@+id/slick_form_text_icon"
+        android:layout_toEndOf="@+id/slick_form_text_icon"
+        android:hint="Usernames"
+        android:background="@android:color/transparent"
+        android:textSize="22sp"
+        android:textColor="@color/colorGrey"
+        android:textColorHint="@color/colorGrey"
+        android:maxLines="1"
+        android:singleLine="true"
+        />
+</merge>
