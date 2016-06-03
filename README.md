@@ -189,6 +189,7 @@ FormField available methods
 Thanks to [Josh Cummings][dribbble-profile] for the [UI][slick-form-page] inspiration  
 Thanks to [Douglas Nassif Roma Junior][tooltip-library] for the awesome Tooltip Effect library	
 Thanks to [geftimov][svg-library] for the SVG path view library
+Thanks to [Perxis][perxis-link] for the SVG line icons
 
 
 ## License
@@ -213,3 +214,4 @@ Thanks to [geftimov][svg-library] for the SVG path view library
 [slick-form-page]: http://www.materialup.com/posts/sign-up-e226cb9b-e06d-4e8c-ba28-3e5837e1cd41
 [tooltip-library]: https://github.com/douglasjunior/android-simple-tooltip
 [svg-library]: https://github.com/geftimov/android-pathview
+[perxis-link]: https://perxis.com 
