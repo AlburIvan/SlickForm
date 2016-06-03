@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/master_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -21,6 +22,7 @@
         android:layout_height="wrap_content"
         android:foreground="?android:attr/selectableItemBackground"
         android:background="@color/colorPurple"
+        android:clickable="true"
         android:text="@string/slick_form_button_text"
         android:textSize="18sp"
         android:textColor="@color/colorWhite"
@@ -37,4 +39,38 @@
         android:progressDrawable="@drawable/green_progress_bar"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:visibility="gone" />
+
+
+    <RelativeLayout
+        android:id="@+id/slick_form_end_anim_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/slick_form_end_progress_bar"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:max="500"
+            android:progress="150"
+            android:progressDrawable="@drawable/circular"
+            style="?android:attr/progressBarStyleHorizontal" />
+
+        <com.eftimoff.androipathview.PathView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/svgIcon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal"
+            app:pathColor="@color/colorPrimary"
+            app:svg="@raw/ic_verification_mark"
+            app:pathWidth="1dp"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+
 </LinearLayout>

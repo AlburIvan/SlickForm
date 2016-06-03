@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
+    <com.eftimoff.androipathview.PathView
         android:id="@+id/slick_form_text_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -13,7 +13,9 @@
         android:paddingTop="13dp"
         android:paddingBottom="10dp"
         android:background="@color/colorWhite"
-        android:src="@drawable/show_gas_report" />
+        app:pathColor="@android:color/black"
+        app:svg="@raw/ic_slick_user"
+        app:pathWidth="2dp" />
 
     <EditText
         android:id="@+id/slick_form_text_input"

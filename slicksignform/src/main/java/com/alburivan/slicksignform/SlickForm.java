@@ -17,6 +17,8 @@ package com.alburivan.slicksignform;
 */
 
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.AsyncTask;
@@ -25,8 +27,12 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -34,8 +40,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.alburivan.slicksignform.animators.ProgressBarAnimation;
+import com.alburivan.slicksignform.interfaces.IOnCustomValidation;
 import com.alburivan.slicksignform.interfaces.IOnProcessChange;
 import com.alburivan.slicksignform.tooltip.SimpleTooltip;
+import com.eftimoff.androipathview.PathView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,12 +52,12 @@ import static com.alburivan.slicksignform.FieldsType.PASSWORD;
 import static com.alburivan.slicksignform.FieldsType.TEXT;
 
 /**
- * (･_･)っ
- *  SlickForm is a custom array of EditTexts with the purpose of handling a form in a cool animated way.
+ * (っ･_･)っ
+ * SlickForm is a custom array of EditTexts with the purpose of handling a form in a cool animated way.
  * The original designer is Josh Cummings https://dribbble.com/shots/2718066-Daily-UI-001
  *
  *  @author Iván Alburquerque
- *  @version pct.alpha-v1
+ *  @version 1.0.0
  */
 public class SlickForm extends LinearLayout {
 
@@ -64,13 +72,18 @@ public class SlickForm extends LinearLayout {
     |
     | The following language lines are used during compile execution. These
     | are the default values used along the different elements that
-    | compose this custom time picker view.
+    | compose this custom time picker slickEndAnimationContainer.
     |
     */
     private Context mContext;
     private RelativeLayout slickFieldContainer;
-    private Button slickFormSubmitButton;
+    private RelativeLayout slickEndAnimationContainer;
     private ProgressBar slickFormProgressBar;
+    private ProgressBar slickEndAnimationProgressBar;
+    private Button slickFormSubmitButton;
+    private PathView slickSVGIcon;
+
+
 
     private int currentFieldPosition                  = -1;
     private final int MINIMUM_CHARACTERS_INPUT        = 4;
@@ -155,6 +168,10 @@ public class SlickForm extends LinearLayout {
             LinearLayout mRootView      = (LinearLayout) inflate(context, R.layout.library_main_layout, this);
             slickFieldContainer         = (RelativeLayout) mRootView.findViewById(R.id.slick_form_field_container);
             slickFormProgressBar        = (ProgressBar) mRootView.findViewById(R.id.slick_form_progress);
+            slickSVGIcon                = (PathView) mRootView.findViewById(R.id.svgIcon);
+            slickEndAnimationContainer  = (RelativeLayout) mRootView.findViewById(R.id.slick_form_end_anim_container);
+            slickEndAnimationProgressBar = (ProgressBar) mRootView.findViewById(R.id.slick_form_end_progress_bar);
+
 
             slickFormSubmitButton       = (Button) mRootView.findViewById(R.id.slick_form_submit_button);
             slickFormSubmitButton.setBackgroundColor(slickButtonBackgroundColor);
@@ -261,9 +278,6 @@ public class SlickForm extends LinearLayout {
 
         // TODO: 5/23/2016 replace with async task
         new DutyAsyncTask().execute(getFields());
-
-        // TODO: 5/23/2016 transform this button to a progressbar with checkmark
-
     }
 
 
@@ -299,9 +313,10 @@ public class SlickForm extends LinearLayout {
 
 
     /**
-     * Initialize the SlickSignForm with the 3 default steps for: username, email, and password
+     * Initialize the SlickSignForm with the 3 default steps which are:
+     * Username, Email, and Password
      *
-     * @return This instance of SlickForm with default fields
+     * @return This instance of SlickForm
      */
     public SlickForm withDefaultFields(){
 
@@ -327,16 +342,34 @@ public class SlickForm extends LinearLayout {
         return this;
     }
 
-    /** default */
+    /**
+     * Adds a new field to the SlickForm's fields collection
+     *
+     * @param field The {@link FormField} object to add
+     * @return This instance of SlickForm
+     */
     public SlickForm withField(FormField field){
         getFields().add(field);
+        return this;
+    }
+
+    /**
+     * Adds a new fields to the SlickForm's fields collection
+     *
+     * @param fields The {@link FormField} array object to add
+     * @return This instance of SlickForm
+     */
+    public SlickForm withFields(FormField[] fields){
+        for(FormField field : fields)
+            getFields().add(field);
+
         return this;
     }
 
 
     /** does nothing, but looks cool huh? */
     public void ready() {
-        // do something...
+        // Do something... ?
     }
 
 
@@ -355,28 +388,28 @@ public class SlickForm extends LinearLayout {
 
 
     /** */
-    public class DutyAsyncTask extends AsyncTask<List<FormField>, Integer, Void> {
+    private class DutyAsyncTask extends AsyncTask<List<FormField>, Integer, Boolean> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
-
         @SafeVarargs
         @Override
-        protected final Void doInBackground(List<FormField>... params) {
+        protected final Boolean doInBackground(List<FormField>... params) {
             Looper.prepare();
 
             if(mActionListener != null)
-                mActionListener.onAsyncStart(params[0]);
+               return mActionListener.workInBackground(params[0]);
+
             return null;
         }
 
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(final Boolean state) {
+            super.onPostExecute(state);
 
             ProgressBarAnimation anim = new ProgressBarAnimation(slickFormProgressBar, 0.0f, 100.0f);
             anim.setInterpolator(new AccelerateInterpolator());
@@ -387,7 +420,67 @@ public class SlickForm extends LinearLayout {
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    mActionListener.onAsyncFinished();
+
+                    Animation fadeOut = new AlphaAnimation(1, 0);
+                    fadeOut.setInterpolator(new AccelerateInterpolator());
+                    fadeOut.setDuration(200);
+
+                    AnimationSet set = new AnimationSet(true);
+                    set.addAnimation(fadeOut);
+                    set.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {}
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+
+                            slickFieldContainer.setVisibility(GONE);
+                            slickFormSubmitButton.setVisibility(GONE);
+                            slickFormProgressBar.setVisibility(GONE);
+                            slickEndAnimationContainer.setVisibility(VISIBLE);
+
+                            ObjectAnimator anims = ObjectAnimator.ofInt (slickEndAnimationProgressBar, "progress", 0, 500);
+                            anims.setDuration (450);
+                            anims.setInterpolator (new DecelerateInterpolator());
+                            anims.addListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {}
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+
+                                    slickSVGIcon = (PathView) findViewById(R.id.svgIcon);
+                                    slickSVGIcon.setVisibility(VISIBLE);
+
+                                    if(!state)
+                                        slickSVGIcon.setSvgResource(R.raw.ic_cross_mark);
+
+                                    slickSVGIcon.getPathAnimator()
+                                            .delay(20)
+                                            .duration(350)
+                                            .interpolator(new AccelerateDecelerateInterpolator())
+                                            .start();
+
+                                    slickSVGIcon.setFillAfter(true);
+
+                                    mActionListener.workFinished();
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {}
+
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {}
+                            });
+
+                            anims.start();
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {}
+                    });
+
+                    startAnimation(set);
                 }
 
                 @Override
@@ -396,8 +489,6 @@ public class SlickForm extends LinearLayout {
                 }
             });
             slickFormProgressBar.startAnimation(anim);
-
-
         }
     }
 
@@ -422,12 +513,18 @@ public class SlickForm extends LinearLayout {
 
     /**
      * This method validate the view given with the state that they represent. That means that it will
-     * return false if the {@link FormField } is empty or contains illegal characters or does
+     * return false if the {@link FormField} is empty or contains illegal characters or does
      * not match a pattern, and if enabled, it will present a warning as a tooltip.
+     *
+     * <p>
+     *     In addition you can add your own custom validation if needed by calling
+     *     {@link FormField#withCustomValidation(IOnCustomValidation)} on the field(s)
+     *     required and implementing your own validation logic.
+     * </p>
      *
      * @param field The view supplied for validation
      * @param type The type comparition
-     * @return {@code false} if invalid or true otherwise
+     * @return {@code false} if invalid or {@code true} otherwise
      */
     private boolean validateView(FormField field, FieldsType type) {
 

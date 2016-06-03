@@ -19,13 +19,16 @@ package com.alburivan.slicksignform;
 import android.content.Context;
 import android.text.InputType;
 import android.util.AttributeSet;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.alburivan.slicksignform.interfaces.IOnCustomValidation;
+import com.eftimoff.androipathview.PathView;
 
-import static com.alburivan.slicksignform.FieldsType.*;
+import static com.alburivan.slicksignform.FieldsType.CUSTOM;
+import static com.alburivan.slicksignform.FieldsType.PASSWORD;
+import static com.alburivan.slicksignform.FieldsType.TEXT;
 
 /**
  * (･_･)っ
@@ -44,7 +47,7 @@ public class FormField extends RelativeLayout {
 
 
     private RelativeLayout mRootView;
-    private ImageView mIconView;
+    private PathView mIconView;
     private EditText mFieldInput;
     private FieldsType formFieldType;
     private String stepLabel = "Next";
@@ -80,7 +83,7 @@ public class FormField extends RelativeLayout {
      */
     public FormField(Context context, AttributeSet attrs, int defStyle){
         super(context, attrs, defStyle);
-        initAttrs(context, TEXT, R.drawable.show_gas_report, "Username");
+        initAttrs(context, TEXT, R.raw.ic_slick_user, "Username");
     }
 
     /**
@@ -111,7 +114,7 @@ public class FormField extends RelativeLayout {
         try {
 
             mRootView                   = (RelativeLayout) inflate(context, R.layout.library_form_field_layout, this);
-            mIconView                   = (ImageView) mRootView.findViewById(R.id.slick_form_text_icon);
+            mIconView                   = (PathView) mRootView.findViewById(R.id.slick_form_text_icon);
             mFieldInput                 = (EditText) mRootView.findViewById(R.id.slick_form_text_input);
 
 
@@ -120,7 +123,12 @@ public class FormField extends RelativeLayout {
 
             params.addRule(RelativeLayout.RIGHT_OF, mIconView.getId());
 
-            this.mIconView.setImageResource(resId);
+            this.mIconView.setSvgResource(resId);
+            this.mIconView.getPathAnimator()
+                    .delay(20)
+                    .duration(350)
+                    .interpolator(new AccelerateDecelerateInterpolator())
+                    .start();
             this.mFieldInput.setLayoutParams(params);
             this.mFieldInput.setHint(hint);
             this.formFieldType = type;
@@ -171,13 +179,13 @@ public class FormField extends RelativeLayout {
      * @return This FormField instance
      */
     public FormField withIcon(int resId) {
-        mIconView.setImageResource(resId);
+        mIconView.setSvgResource(resId);
         mIconView.invalidate();
         return this;
     }
 
     /**
-     * Customize this form field's button label. Current default is {@link #stepLabel}
+     * Customize this form field's button label. Current default is "Next"
      *
      * @param label The button's new label
      * @return This FormField instance
@@ -235,11 +243,11 @@ public class FormField extends RelativeLayout {
         this.stepLabel = stepLabel;
     }
 
-    public ImageView getIconField() {
+    public PathView getIconField() {
         return mIconView;
     }
 
-    public void setmIconView(ImageView mIconView) {
+    public void setmIconView(PathView mIconView) {
         this.mIconView = mIconView;
     }
 
@@ -254,7 +262,6 @@ public class FormField extends RelativeLayout {
     public void setInputField(EditText mFieldInput) {
         this.mFieldInput = mFieldInput;
     }
-
 
     public IOnCustomValidation getCallback() {
         return callback;

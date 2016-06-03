@@ -18,6 +18,8 @@ Based on [This awesome design][slick-form-page] from [Josh Cummings][dribbble-pr
 
 ## Demo
 
+
+
 ## Integration
 
 To try this library into your build:
@@ -62,31 +64,31 @@ Extra attributes available:
 
 Default behavior (3 fields: email, user, & password):
 ```java
-
- slickSignForm.withDefaultFields()
+ SlickForm slickForm =
+                (SlickForm) findViewById(R.id.slick_form);
+                
+ slickForm.withDefaultFields()
                     .setOnProcessChangeListener(new IOnProcessChange() {
-                         @Override
-                        public void onAsyncStart(List<FormField> param) {
+                        @Override
+                        public boolean workInBackground(List<FormField> param) {
+
                             final String message = String.format(Locale.ENGLISH,
                                     "This form is finished and the values are: first field: %s - second field: %s  - third field: %s",
                                     param.get(0).getInputFieldText(), param.get(1).getInputFieldText(), param.get(2).getInputFieldText()
                             );
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                                }
-                            });
+                            Log.d("TAG", message);
+
+                            // if all goes good, return true, if it failed return false
+                            return true;
                         }
 
                         @Override
-                        public void onAsyncFinished() {
-                            Log.d("TAG", "done");
+                        public void workFinished() {
+                            Log.d("TAG", "Done");
                         }
                     })
                     .ready();
-
 ```
 
 ## Thats it?
@@ -100,11 +102,10 @@ Not really... You can extend it to your needs
 1. Create FormFields Objects
 
 ```java
-
-	 FormField userField = new FormField(getApplicationContext())
+	FormField userField = new FormField(getApplicationContext())
             .withType(FieldsType.TEXT)
             .withHint("Username")
-            .withLabel("hit me"); // optional - default: Next
+            .withLabel("Hit me"); // optional - default: Next
 
     FormField emailField = new FormField(getApplicationContext())
             .withType(FieldsType.EMAIL)
@@ -138,53 +139,56 @@ Not really... You can extend it to your needs
 2. Add them your SlickForm Object
 
 ```java
+ 	SlickForm slickForm =
+                	(SlickForm) findViewById(R.id.slick_form);
 
- 	SlickSignForm slickSignForm =
-                	(SlickSignForm) findViewById(R.id.slick_form);
-
- 	slickSignForm
+ 	slickForm
             .withField(userField)
             .withField(emailField)
             .withField(passField) // chain any number of fields in the order of appearance
             .setOnProcessChangeListener(new IOnProcessChange() {
                     @Override
-                    public void onAsyncStart(List<FormField> param) {
+                    public boolean workInBackground(List<FormField> param) {
+
                         final String message = String.format(Locale.ENGLISH,
                                 "This form is finished and the values are: first field: %s - second field: %s  - third field: %s",
                                 param.get(0).getInputFieldText(), param.get(1).getInputFieldText(), param.get(2).getInputFieldText()
                         );
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                            }
-                        });
+                        Log.d("TAG", message);
+
+                        // if all goes good, return true, if it failed return false
+                        return true;
                     }
 
                     @Override
-                    public void onAsyncFinished() {
-                        Log.d("TAG", "done");
+                    public void workFinished() {
+                        Log.d("TAG", "Done");
                     }
                 })
                 .ready();
-
 ```
 
 
 ## Extras
 
-withType
+FormField available methods
 
-withHint
+|  Method   | Description 																																					|  Usage     | 
+|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
+| withType  |  Add this form field's type so it can get validated correctly according to the type. default TEXT														 		| FieldType  |
+| withHint  |  Add this form field's hint to let the user know what needs to be filled in. 																					| String  	 |
+| withIcon  |  Add this form field's icon to give the user a visual cue of what needs to be filled in. 																		| Drawable/SVG   |
+| withLabel	|  Customize this form field's button label. Current default is "Next"																							| String     |
+| withCustomValidation |  Assign this FormField an unique validation 																									| IOnCustomValidation |
 
-withIcon
 
-withLabel
+
 
 ## Credits
 Thanks to [Josh Cummings][dribbble-profile] for the [UI][slick-form-page] inspiration  
-Thanks to [Douglas Nassif Roma Junior][tooltip-library] for the awesome Tooltip Effect library
+Thanks to [Douglas Nassif Roma Junior][tooltip-library] for the awesome Tooltip Effect library	
+Thanks to [geftimov][svg-library] for the SVG path view library
 
 
 ## License
@@ -208,3 +212,4 @@ Thanks to [Douglas Nassif Roma Junior][tooltip-library] for the awesome Tooltip 
 [dribbble-profile]: https://dribbble.com/joshcummingsdesign
 [slick-form-page]: http://www.materialup.com/posts/sign-up-e226cb9b-e06d-4e8c-ba28-3e5837e1cd41
 [tooltip-library]: https://github.com/douglasjunior/android-simple-tooltip
+[svg-library]: https://github.com/geftimov/android-pathview
