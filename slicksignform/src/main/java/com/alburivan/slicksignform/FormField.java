@@ -124,11 +124,7 @@ public class FormField extends RelativeLayout {
             params.addRule(RelativeLayout.RIGHT_OF, mIconView.getId());
 
             this.mIconView.setSvgResource(resId);
-            this.mIconView.getPathAnimator()
-                    .delay(20)
-                    .duration(350)
-                    .interpolator(new AccelerateDecelerateInterpolator())
-                    .start();
+            this.mIconView.setFillAfter(true);
             this.mFieldInput.setLayoutParams(params);
             this.mFieldInput.setHint(hint);
             this.formFieldType = type;
@@ -179,8 +175,13 @@ public class FormField extends RelativeLayout {
      * @return This FormField instance
      */
     public FormField withIcon(int resId) {
-        mIconView.setSvgResource(resId);
-        mIconView.invalidate();
+        this.mIconView.setSvgResource(resId);
+        this.mIconView.getPathAnimator()
+                .delay(20)
+                .duration(350)
+                .interpolator(new AccelerateDecelerateInterpolator())
+                .start();
+        this.mIconView.invalidate();
         return this;
     }
 

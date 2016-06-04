@@ -16,7 +16,6 @@ package com.alburivan.slicksignform;
 * limitations under the License.
 */
 
-
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -84,7 +83,6 @@ public class SlickForm extends LinearLayout {
     private PathView slickSVGIcon;
 
 
-
     private int currentFieldPosition                  = -1;
     private final int MINIMUM_CHARACTERS_INPUT        = 4;
     private final int MINIMUM_NAME_CHARACTERS_INPUT   = 1;
@@ -141,8 +139,6 @@ public class SlickForm extends LinearLayout {
         super(context, attrs, defStyle);
         initAttrs(context, attrs);
     }
-
-
 
     /**
      * Method that initializes this custom view's default values and sets listeners
@@ -386,8 +382,9 @@ public class SlickForm extends LinearLayout {
     }
 
 
-
-    /** */
+    /**
+     *
+     */
     private class DutyAsyncTask extends AsyncTask<List<FormField>, Integer, Boolean> {
 
         @Override
@@ -398,14 +395,11 @@ public class SlickForm extends LinearLayout {
         @SafeVarargs
         @Override
         protected final Boolean doInBackground(List<FormField>... params) {
-            Looper.prepare();
+            if (Looper.myLooper() == null)
+                Looper.prepare();
 
-            if(mActionListener != null)
-               return mActionListener.workInBackground(params[0]);
-
-            return null;
+            return mActionListener != null && mActionListener.workInBackground(params[0]);
         }
-
 
         @Override
         protected void onPostExecute(final Boolean state) {
@@ -457,7 +451,7 @@ public class SlickForm extends LinearLayout {
 
                                     slickSVGIcon.getPathAnimator()
                                             .delay(20)
-                                            .duration(350)
+                                            .duration(500)
                                             .interpolator(new AccelerateDecelerateInterpolator())
                                             .start();
 
@@ -499,16 +493,20 @@ public class SlickForm extends LinearLayout {
      * some errores that need to be resolved before continuing.
      */
     private void showWarningDialog() {
+        if(isTooltipEnabled) {
 
-        if(isTooltipEnabled)
-            new SimpleTooltip.Builder(mContext)
-                    .anchorView(slickFieldContainer.getChildAt(0))
-                    .text("     !     ")
-                    .gravity(Gravity.END)
-                    .animated(true)
-                    .transparentOverlay(true)
-                    .build()
-                    .show();
+            SimpleTooltip.Builder builder = new SimpleTooltip.Builder(mContext);
+            builder.anchorView(slickFieldContainer.getChildAt(0));
+            builder.text("     !     ");
+            builder.gravity(Gravity.END);
+            builder.animated(true);
+            builder.transparentOverlay(true);
+
+            SimpleTooltip mTooltip = builder.build();
+
+            if (!mTooltip.isShowing())
+                mTooltip.show();
+        }
     }
 
     /**
@@ -590,16 +588,4 @@ public class SlickForm extends LinearLayout {
 
         return animation;
     }
-
-    /** Applies a slide down animation relative to itself to the view supplied */
-    private void applySlideUpAnimationTo(View view) {
-        Animation animation = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -1.0f
-        );
-        animation.setDuration(100);
-        animation.setInterpolator(new AccelerateInterpolator());
-        view.startAnimation(animation);
-    }
-
 }

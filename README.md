@@ -3,6 +3,7 @@
 [![CircleCI](https://img.shields.io/circleci/project/BrightFlair/PHP.Gt.svg?maxAge=2592000)](https://circleci.com/gh/AlburIvan/SlickForm/1)
 [![Twitter](https://img.shields.io/badge/Twitter-%40AlburIvan-blue.svg?style=flat)](https://twitter.com/AlburIvan)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7b66c5b5651044bb9c7a941bec7f0efc)](https://www.codacy.com/app/albur-ivan/SlickForm?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AlburIvan/SlickForm&amp;utm_campaign=Badge_Grade)
+[![Jitpack Badge](https://jitpack.io/v/AlburIvan/SlickForm.svg)](https://jitpack.io/#AlburIvan/SlickForm)
 
 
 Based on [This awesome design][slick-form-page] from [Josh Cummings][dribbble-profile]. SlickForm is an Android library where you define a custom array of EditTexts with the purpose of handling a form in a cool animated way.
@@ -189,7 +190,7 @@ FormField available methods
 ## Credits
 Thanks to [Josh Cummings][dribbble-profile] for the [UI][slick-form-page] inspiration  
 Thanks to [Douglas Nassif Roma Junior][tooltip-library] for the awesome Tooltip Effect library	
-Thanks to [geftimov][svg-library] for the SVG path view library	
+Thanks to [Georgi Eftimov][svg-library] for the SVG path view library	
 Thanks to [Perxis][perxis-link] for the SVG line icons
 
 
