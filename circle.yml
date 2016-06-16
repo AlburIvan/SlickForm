@@ -1,11 +1,14 @@
+#
+# Build configuration for Circle CI
+#
 machine:
     environment:
+      ANDROID_HOME: /usr/local/android-sdk-linux
 
 dependencies:
-  override:
-      - chmod +x gradlew
-      - ./gradlew dependencies
+    pre:
+      - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.2,android-23,extra-android-support
 
-test:
-  override:
-    - ./gradlew build check
+    override:
+      - chmod +x gradlew
+      - ./gradlew dependencies --console=plain
