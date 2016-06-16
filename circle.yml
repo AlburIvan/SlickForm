@@ -2,9 +2,6 @@ machine:
     environment:
 
 dependencies:
-  pre:
-      - echo y | android update sdk --no-ui --all --filter "tools,platform-tools,android-24"
-      - echo y | android update sdk --no-ui --all --filter "build-tools-24.0.0 rc3"
   override:
       - chmod +x gradlew
       - ./gradlew dependencies
