@@ -20,7 +20,7 @@
         android:id="@+id/slick_form_submit_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
         android:background="@color/colorPurple"
         android:clickable="true"
         android:text="@string/slick_form_button_text"
