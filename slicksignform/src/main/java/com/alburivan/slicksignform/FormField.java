@@ -1,5 +1,4 @@
 package com.alburivan.slicksignform;
-
 /*
 * Copyright 2016 AlburIvan [Ivan Alberto Alburquerque Mejia]
 *
@@ -20,10 +19,10 @@ import android.content.Context;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.alburivan.slicksignform.interfaces.IOnCustomValidation;
-import com.eftimoff.androipathview.PathView;
 
 import static com.alburivan.slicksignform.FieldsType.CUSTOM;
 import static com.alburivan.slicksignform.FieldsType.PASSWORD;
@@ -46,7 +45,7 @@ public class FormField extends RelativeLayout {
 
 
     private RelativeLayout mRootView;
-    private PathView mIconView;
+    private ImageView mIconView;
     private EditText mFieldInput;
     private FieldsType formFieldType;
     private String stepLabel = "Next";
@@ -59,7 +58,7 @@ public class FormField extends RelativeLayout {
      */
     public FormField(Context context) {
         super(context);
-        initAttrs(context, TEXT, R.raw.ic_slick_user, "Username");
+        initAttrs(context, TEXT, R.drawable.ic_slick_user, "Username");
     }
 
     /**
@@ -70,7 +69,7 @@ public class FormField extends RelativeLayout {
      */
     public FormField(Context context, AttributeSet attrs){
         super(context, attrs);
-        initAttrs(context, TEXT, R.raw.ic_slick_user, "Username");
+        initAttrs(context, TEXT, R.drawable.ic_slick_user, "Username");
     }
 
     /**
@@ -82,7 +81,7 @@ public class FormField extends RelativeLayout {
      */
     public FormField(Context context, AttributeSet attrs, int defStyle){
         super(context, attrs, defStyle);
-        initAttrs(context, TEXT, R.raw.ic_slick_user, "Username");
+        initAttrs(context, TEXT, R.drawable.ic_slick_user, "Username");
     }
 
     /**
@@ -107,13 +106,10 @@ public class FormField extends RelativeLayout {
      * @param hint The user hint for the EditText
      */
     private void initAttrs(Context context, FieldsType type, int resId, String hint) {
-        if (isInEditMode())
-            return;
-
         try {
 
             this.mRootView                   = (RelativeLayout) inflate(context, R.layout.library_form_field_layout, this);
-            this.mIconView                   = (PathView) mRootView.findViewById(R.id.slick_form_text_icon);
+            this.mIconView                   = (ImageView) mRootView.findViewById(R.id.slick_form_text_icon);
             this.mFieldInput                 = (EditText) mRootView.findViewById(R.id.slick_form_text_input);
 
             LayoutParams params =
@@ -121,8 +117,8 @@ public class FormField extends RelativeLayout {
 
             params.addRule(RelativeLayout.RIGHT_OF, mIconView.getId());
 
-            this.mIconView.setSvgResource(resId);
-//            this.mFieldInput.setLayoutParams(params);
+            this.mIconView.setImageResource(resId);
+            this.mFieldInput.setLayoutParams(params);
             this.mFieldInput.setHint(hint);
             this.formFieldType = type;
         }
@@ -172,7 +168,7 @@ public class FormField extends RelativeLayout {
      * @return This FormField instance
      */
     public FormField withIcon(int resId) {
-        this.mIconView.setSvgResource(resId);
+        this.mIconView.setImageResource(resId);
         return this;
     }
 
@@ -234,11 +230,11 @@ public class FormField extends RelativeLayout {
         this.stepLabel = stepLabel;
     }
 
-    public PathView getIconField() {
+    public ImageView getIconField() {
         return mIconView;
     }
 
-    public void setmIconView(PathView mIconView) {
+    public void setmIconView(ImageView mIconView) {
         this.mIconView = mIconView;
     }
 

@@ -170,6 +170,7 @@ public class SlickForm extends LinearLayout {
                     processFormState();
                 }
             });
+
         } finally {
             typedArray.recycle();
         }
@@ -241,9 +242,9 @@ public class SlickForm extends LinearLayout {
         return this;
     }
 
-    /** Initially it did nothing than look as a cool method, but I decided to let it initiate the form */
+    /** It does nothing, but look as a cool huh */
     public void ready() {
-        processFormFieldBegin();
+       // do nothing
     }
 
 
@@ -257,6 +258,13 @@ public class SlickForm extends LinearLayout {
      * </p>
      */
     private void processFormState() {
+
+        if(currentFieldPosition == -1) {
+            Log.d(DEBUG_TAG, "process(): begin");
+            processFormFieldBegin();
+            return;
+        }
+
         FormField field =  formFields.get(currentFieldPosition);
 
         if (field != null)
@@ -324,7 +332,6 @@ public class SlickForm extends LinearLayout {
         slickFieldContainer.setVisibility(View.GONE);
         slickFormProgressBar.setVisibility(View.VISIBLE);
 
-        // TODO: 5/23/2016 replace with async task
         new DutyAsyncTask().execute(getFields());
     }
 
