@@ -7,7 +7,7 @@ machine:
 
 dependencies:
     pre:
-      - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.2,android-23,extra-android-support
+      - echo y | android update sdk --no-ui --all --filter tools,platform-tools,build-tools-23.0.2,android-23,extra-android-m2repository
 
     override:
       - chmod +x gradlew
