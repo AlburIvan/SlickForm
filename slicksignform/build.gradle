@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    buildToolsVersion '24.0.0 rc3'
 
     dexOptions {
         maxProcessCount 2
@@ -28,6 +28,6 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.3.0'
+    compile 'com.android.support:design:23.4.0'
     compile 'com.eftimoff:android-pathview:1.0.8@aar'
 }
