@@ -587,7 +587,6 @@ public class SlickForm extends LinearLayout {
                     return false;
                 break;
 
-
             case CUSTOM:
                 if(field.getCallback() != null)
                     return field.getCallback().withCustomValidation(field);
