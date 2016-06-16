@@ -45,6 +45,7 @@ import com.alburivan.slicksignform.tooltip.SimpleTooltip;
 import com.eftimoff.androipathview.PathView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.alburivan.slicksignform.FieldsType.PASSWORD;
@@ -58,10 +59,13 @@ import static com.alburivan.slicksignform.FieldsType.TEXT;
  *  @author Iván Alburquerque
  *  @version 1.0.0
  */
+@SuppressWarnings("unused")
 public class SlickForm extends LinearLayout {
 
 
-    /** Custom tag used by the SlickForm to output logging information. */
+    /**
+     * Custom tag used by the SlickForm to output logging information.
+     */
     private final String DEBUG_TAG = SlickForm.class.getCanonicalName();
 
     /*
@@ -81,30 +85,15 @@ public class SlickForm extends LinearLayout {
     private ProgressBar slickEndAnimationProgressBar;
     private Button slickFormSubmitButton;
     private PathView slickSVGIcon;
+    private IOnProcessChange mActionListener;
+    private List<FormField> formFields                = new ArrayList<>();
 
-
+    private boolean isTooltipEnabled                  = true;
+    private int slickButtonBackgroundColor;
+    private int slickButtonForegroundColor;
     private int currentFieldPosition                  = -1;
     private final int MINIMUM_CHARACTERS_INPUT        = 4;
     private final int MINIMUM_NAME_CHARACTERS_INPUT   = 1;
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Custom View Properties
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are used during compile execution. These
-    | are the principal properties that FlingTimePicker can adquire during
-    | runtime execution.
-    |
-    */
-
-    private List<FormField> formFields = new ArrayList<>();
-    private IOnProcessChange mActionListener;
-    private boolean isTooltipEnabled = true;
-    private int slickButtonBackgroundColor;
-    private int slickButtonForegroundColor;
-
 
 
 
@@ -187,21 +176,87 @@ public class SlickForm extends LinearLayout {
 
     }
 
+
+    /**
+     * Initialize the SlickSignForm with the 3 default steps which are:
+     * Username, Email, and Password
+     *
+     * @return This instance of SlickForm
+     */
+    public SlickForm withDefaultFields(){
+
+        FormField userField = new FormField(mContext)
+                .withType(TEXT)
+                .withIcon(R.raw.ic_slick_user)
+                .withHint(mContext.getString(R.string.form_field_username));
+
+        FormField emailField = new FormField(mContext)
+                .withType(TEXT)
+                .withIcon(R.raw.ic_slick_email)
+                .withHint(mContext.getString(R.string.form_field_email));
+
+        FormField passField = new FormField(mContext)
+                .withType(PASSWORD)
+                .withIcon(R.raw.ic_slick_lock)
+                .withHint(mContext.getString(R.string.form_field_password));
+
+        this.formFields.add(userField);
+        this.formFields.add(emailField);
+        this.formFields.add(passField);
+
+        return this;
+    }
+
+    /**
+     * Adds a new field to the SlickForm's fields collection
+     *
+     * @param field The {@link FormField} object to add
+     * @return This instance of SlickForm
+     */
+    public SlickForm withField(FormField field){
+        this.formFields.add(field);
+        return this;
+    }
+
+    /**
+     * Adds a new fields to the SlickForm's fields collection
+     *
+     * @param fields The {@link FormField} array object to add
+     * @return This instance of SlickForm
+     */
+    public SlickForm withFields(FormField[] fields){
+        Collections.addAll(this.formFields, fields);
+        return this;
+    }
+
+
+    /**
+     *
+     *
+     * @param listener The process change callback
+     * @return This instance of SlickForm
+     */
+    public SlickForm setOnProcessChangeListener(IOnProcessChange listener) {
+        this.mActionListener = listener;
+        return this;
+    }
+
+    /** Initially it did nothing than look as a cool method, but I decided to let it initiate the form */
+    public void ready() {
+        processFormFieldBegin();
+    }
+
+
     /**
      * This method controls the form's state flow and subsequently process all fields added to this
-     * form with their respective validations. Once the list gets to the last element it will
-     * initiate the process to end this form and send the control to the developer for
-     * implementation purposes.
+     * form with their respective validations.
      *
+     * <p>
+     * Once the list gets to the last element it will initiate the process to end this form
+     * and send the control to the developer for implementation purposes.
+     * </p>
      */
     private void processFormState() {
-
-        if(currentFieldPosition == -1) {
-            Log.d(DEBUG_TAG,"process(): begin");
-            processFormFieldBegin();
-            return;
-        }
-
         FormField field =  formFields.get(currentFieldPosition);
 
         if (field != null)
@@ -212,7 +267,6 @@ public class SlickForm extends LinearLayout {
 
     /**
      * Initialize the form submition progress by enabling the input field
-     *
      */
     private void processFormFieldBegin() {
 
@@ -232,7 +286,6 @@ public class SlickForm extends LinearLayout {
 
         slickFieldContainer.addView(field);
     }
-
 
     /**
      * This method process the fields values given, after validation it will change on to the
@@ -262,12 +315,11 @@ public class SlickForm extends LinearLayout {
                 });
     }
 
-
     /**
      *
      *
      */
-    public void processFormFieldEnd() {
+    private void processFormFieldEnd() {
         slickFormSubmitButton.setText(R.string.form_field_progress);
         slickFieldContainer.setVisibility(View.GONE);
         slickFormProgressBar.setVisibility(View.VISIBLE);
@@ -289,7 +341,7 @@ public class SlickForm extends LinearLayout {
             return;
         }
 
-        if(currentFieldPosition == formFields.size() -1) {
+        if(currentFieldPosition == formFields.size() - 1) {
             slickFormSubmitButton.setText(
                     formFields.get(currentFieldPosition).getStepLabel().equals("Next") ?
                             "Submit" : formFields.get(currentFieldPosition).getStepLabel()
@@ -308,76 +360,58 @@ public class SlickForm extends LinearLayout {
 
 
 
+
+
+
     /**
-     * Initialize the SlickSignForm with the 3 default steps which are:
-     * Username, Email, and Password
-     *
-     * @return This instance of SlickForm
+     * Enable the tooltip to be displayed when an error in a validation occurs
      */
-    public SlickForm withDefaultFields(){
-
-        FormField userField = new FormField(mContext)
-                .withType(TEXT)
-                .withIcon(R.raw.ic_slick_user)
-                .withHint(mContext.getString(R.string.form_field_username));
-
-        FormField emailField = new FormField(mContext)
-                .withType(TEXT)
-                .withIcon(R.raw.ic_slick_email)
-                .withHint(mContext.getString(R.string.form_field_email));
-
-        FormField passField = new FormField(mContext)
-                .withType(PASSWORD)
-                .withIcon(R.raw.ic_slick_lock)
-                .withHint(mContext.getString(R.string.form_field_password));
-
-        getFields().add(userField);
-        getFields().add(emailField);
-        getFields().add(passField);
-
-        return this;
+    public void setTooltipEnabled() {
+        this.isTooltipEnabled = true;
     }
 
     /**
-     * Adds a new field to the SlickForm's fields collection
-     *
-     * @param field The {@link FormField} object to add
-     * @return This instance of SlickForm
+     * Prevent the tooltip from being displayed
      */
-    public SlickForm withField(FormField field){
-        getFields().add(field);
-        return this;
+    public void setTooltipDisabled() {
+        this.isTooltipEnabled = false;
     }
 
     /**
-     * Adds a new fields to the SlickForm's fields collection
-     *
-     * @param fields The {@link FormField} array object to add
-     * @return This instance of SlickForm
+     * @return {@code true} if the error tooltip is enabled and {@code false} otherwise
      */
-    public SlickForm withFields(FormField[] fields){
-        for(FormField field : fields)
-            getFields().add(field);
+    public boolean isTooltipEnabled() {
+        return this.isTooltipEnabled;
+    }
 
-        return this;
+    /**
+     * Change the submit button's background color to the one provided, this will not change
+     * the circular progress animation's color.
+     *
+     * @param resId The color to be applied
+     */
+    public void changeButtonBackgroundColor(int resId) {
+        this.slickButtonBackgroundColor = resId;
+        slickFormSubmitButton.setBackgroundColor(slickButtonBackgroundColor);
+        slickFormSubmitButton.invalidate();
+    }
+
+    /**
+     * Change the submit button's text color to the one provided
+     *
+     * @param resId The color to be applied
+     */
+    public void changeButtonTextColor(int resId) {
+        this.slickButtonBackgroundColor = resId;
+        slickFormSubmitButton.setTextColor(slickButtonBackgroundColor);
+        slickFormSubmitButton.invalidate();
     }
 
 
-    /** does nothing, but looks cool huh? */
-    public void ready() {
-        // Do something... ?
-    }
-
-
-
-    public SlickForm setOnProcessChangeListener(IOnProcessChange listener) {
-        this.mActionListener = listener;
-        return this;
-    }
-
-
-
-    public List<FormField> getFields(){
+    /**
+     * @return Colletion of the fields in this form
+     */
+    private List<FormField> getFields(){
         return formFields;
     }
 
@@ -526,26 +560,34 @@ public class SlickForm extends LinearLayout {
      */
     private boolean validateView(FormField field, FieldsType type) {
 
-        if(type.equals(FieldsType.TEXT)) {
-            if (field.getInputField().getText().toString().trim().length() <= MINIMUM_NAME_CHARACTERS_INPUT)
-                return false;
-        }
+        switch (type){
 
-        else if(type.equals(FieldsType.EMAIL)) {
-            if(field.getInputField().getText().toString().trim().length() <= MINIMUM_CHARACTERS_INPUT)
-                return false;
+            case TEXT:
+                if (field.getInputField().getText().toString().trim().length() <= MINIMUM_NAME_CHARACTERS_INPUT)
+                    return false;
+                break;
 
-            if(!isEmailValid(field.getInputField().getText().toString()))
-                return false;
-        }
+            case EMAIL:
+                if(field.getInputField().getText().toString().trim().length() <= MINIMUM_CHARACTERS_INPUT)
+                    return false;
 
-        else if(type.equals(FieldsType.PASSWORD)) {
-            if(field.getInputField().getText().toString().trim().length() <= MINIMUM_CHARACTERS_INPUT)
-                return false;
-        }
+                if(!isEmailValid(field.getInputField().getText().toString()))
+                    return false;
+                break;
 
-        else if(type.equals(FieldsType.CUSTOM) && field.getCallback() != null) {
-            return field.getCallback().withCustomValidation(field);
+            case PASSWORD:
+                if(field.getInputField().getText().toString().trim().length() <= MINIMUM_CHARACTERS_INPUT)
+                    return false;
+                break;
+
+
+            case CUSTOM:
+                if(field.getCallback() != null)
+                    return field.getCallback().withCustomValidation(field);
+                break;
+
+            default:
+                return true;
         }
 
         return true;
@@ -562,7 +604,9 @@ public class SlickForm extends LinearLayout {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    /** Applies a slide down animation relative to itself to the view supplied */
+    /**
+     * Applies a slide down animation relative to itself to the view supplied
+     */
     private Animation applySlideDownAnimationTo(View view) {
         Animation animation = new TranslateAnimation(
                 Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
@@ -576,7 +620,9 @@ public class SlickForm extends LinearLayout {
         return animation;
     }
 
-    /** Applies a slide down animation relative to itself to the view supplied */
+    /**
+     * Applies a slide down animation relative to itself to the view supplied
+     */
     private Animation applySlideLeftAnimationTo(View view) {
         Animation animation = new TranslateAnimation(
                 Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, -1.0f,

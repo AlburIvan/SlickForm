@@ -19,7 +19,6 @@ package com.alburivan.slicksignform;
 import android.content.Context;
 import android.text.InputType;
 import android.util.AttributeSet;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
@@ -31,7 +30,7 @@ import static com.alburivan.slicksignform.FieldsType.PASSWORD;
 import static com.alburivan.slicksignform.FieldsType.TEXT;
 
 /**
- * (･_･)っ
+ * (っ･_･)っ
  *  FormField is a custom RelativeLayout that contains a compound view consisting of an icon and
  *  a normal EditText for inputs
  *
@@ -107,16 +106,15 @@ public class FormField extends RelativeLayout {
      * @param resId Resource Id for the icon
      * @param hint The user hint for the EditText
      */
-    private void initAttrs(final Context context, FieldsType type, int resId, String hint) {
+    private void initAttrs(Context context, FieldsType type, int resId, String hint) {
         if (isInEditMode())
             return;
 
         try {
 
-            mRootView                   = (RelativeLayout) inflate(context, R.layout.library_form_field_layout, this);
-            mIconView                   = (PathView) mRootView.findViewById(R.id.slick_form_text_icon);
-            mFieldInput                 = (EditText) mRootView.findViewById(R.id.slick_form_text_input);
-
+            this.mRootView                   = (RelativeLayout) inflate(context, R.layout.library_form_field_layout, this);
+            this.mIconView                   = (PathView) mRootView.findViewById(R.id.slick_form_text_icon);
+            this.mFieldInput                 = (EditText) mRootView.findViewById(R.id.slick_form_text_input);
 
             LayoutParams params =
                     new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -124,8 +122,7 @@ public class FormField extends RelativeLayout {
             params.addRule(RelativeLayout.RIGHT_OF, mIconView.getId());
 
             this.mIconView.setSvgResource(resId);
-            this.mIconView.setFillAfter(true);
-            this.mFieldInput.setLayoutParams(params);
+//            this.mFieldInput.setLayoutParams(params);
             this.mFieldInput.setHint(hint);
             this.formFieldType = type;
         }
@@ -141,14 +138,14 @@ public class FormField extends RelativeLayout {
      *
      * <p>
      *     If {@code FieldsType.PASSWORD} is used, it will set the EditText is input type
-     *     to TYPE_TEXT_VARIATION_PASSWORD, which means every character will appear
+     *     to {@code TYPE_TEXT_VARIATION_PASSWORD}, which means every character will appear
      *     as an asterisk.
      * </p>
      *
      * @param type The specified type to validate this input against
      * @return This FormField instance
      */
-    public FormField withType(FieldsType type){
+    public FormField withType(FieldsType type) {
         this.formFieldType = type;
 
         if(type.equals(PASSWORD))
@@ -176,12 +173,6 @@ public class FormField extends RelativeLayout {
      */
     public FormField withIcon(int resId) {
         this.mIconView.setSvgResource(resId);
-        this.mIconView.getPathAnimator()
-                .delay(20)
-                .duration(350)
-                .interpolator(new AccelerateDecelerateInterpolator())
-                .start();
-        this.mIconView.invalidate();
         return this;
     }
 
@@ -224,7 +215,6 @@ public class FormField extends RelativeLayout {
 
         return this;
     }
-
 
 
     public FieldsType getFormFieldType() {
