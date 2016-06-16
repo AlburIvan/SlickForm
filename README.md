@@ -1,6 +1,6 @@
 ## SlickForm
 
-[![CircleCI](https://img.shields.io/circleci/project/BrightFlair/PHP.Gt.svg?maxAge=2592000)](https://circleci.com/gh/AlburIvan/SlickForm/1)
+[![CircleCI](https://img.shields.io/appveyor/ci/gruntjs/grunt/master.svg)](https://circleci.com/gh/AlburIvan/SlickForm/19)
 [![Twitter](https://img.shields.io/badge/Twitter-%40AlburIvan-blue.svg?style=flat)](https://twitter.com/AlburIvan)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7b66c5b5651044bb9c7a941bec7f0efc)](https://www.codacy.com/app/albur-ivan/SlickForm?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=AlburIvan/SlickForm&amp;utm_campaign=Badge_Grade)
 [![Jitpack Badge](https://jitpack.io/v/AlburIvan/SlickForm.svg)](https://jitpack.io/#AlburIvan/SlickForm)
