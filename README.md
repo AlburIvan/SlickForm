@@ -20,6 +20,7 @@ Based on [This awesome design][slick-form-page] from [Josh Cummings][dribbble-pr
 
 ## Demo
 
+![][slick-form-demo]
 
 
 ## Integration
@@ -28,19 +29,20 @@ To try this library into your build:
 
 Step 1. Add the JitPack repository to your project build.gradle:
 
+```groovy
 	allprojects {
 		repositories {
 			...
 			maven { url "https://jitpack.io" }
 		}
 	}
-    
+```    
 Step 2. Add the dependency
-
+```groovy
 	dependencies {
-		compile '....'
+		compile 'com.github.AlburIvan:SlickForm:v1.2'
 	}
-
+```
 
 ## Usage
 
@@ -70,27 +72,27 @@ Default behavior (3 fields: email, user, & password):
                 (SlickForm) findViewById(R.id.slick_form);
                 
  slickForm.withDefaultFields()
-                    .setOnProcessChangeListener(new IOnProcessChange() {
-                        @Override
-                        public boolean workInBackground(List<FormField> param) {
+            .setOnProcessChangeListener(new IOnProcessChange() {
+                @Override
+                public boolean workInBackground(List<FormField> param) {
 
-                            final String message = String.format(Locale.ENGLISH,
-                                    "This form is finished and the values are: first field: %s - second field: %s  - third field: %s",
-                                    param.get(0).getInputFieldText(), param.get(1).getInputFieldText(), param.get(2).getInputFieldText()
-                            );
+                    final String message = String.format(Locale.ENGLISH,
+                            "This form is doing work in background and the values are: first field: %s - second field: %s  - third field: %s",
+                            param.get(0).getInputFieldText(), param.get(1).getInputFieldText(), param.get(2).getInputFieldText()
+                    );
 
-                            Log.d("TAG", message);
+                    Log.d("TAG", message);
 
-                            // if all goes good, return true, if it failed return false
-                            return true;
-                        }
+                    // if all goes good, return true, if it failed return false
+                    return true;
+                }
 
-                        @Override
-                        public void workFinished() {
-                            Log.d("TAG", "Done");
-                        }
-                    })
-                    .ready();
+                @Override
+                public void workFinished() {
+                    Log.d("TAG", "Done");
+                }
+            })
+            .ready();
 ```
 
 ## Thats it?
@@ -114,27 +116,24 @@ Not really... You can extend it to your needs
             .withHint("Email");
 
     FormField passField = new FormField(getApplicationContext())
-            .withType(FieldsType.PASSWORD) // can be ommitted, read below...
+            .withType(FieldsType.PASSWORD)
             .withCustomValidation(new IOnCustomValidation() {
 
-            	// add your own custom validation if neccesarry. WARNING: it will override the FieldType to CUSTOM
-                @Override
-                public boolean withCustomValidation(FormField field) {
+                    // Add your own custom validation if neccesarry.
+                    @Override
+                    public boolean withCustomValidation(FormField field) {
 
-                    String password 	 = field.getInputField().getText().toString();
+                        String password      = field.getInputFieldText();
 
-                    boolean hasUppercase = !password.equals(password.toLowerCase());
-                    boolean hasLowercase = !password.equals(password.toUpperCase());
+                        boolean hasUppercase = !password.equals(password.toLowerCase());
+                        boolean hasLowercase = !password.equals(password.toUpperCase());
 
-                    boolean isAtLeast8   =  password.length() >= 8;
-                    boolean hasSpecial   = !password.matches("[A-Za-z0-9 ]*");
+                        boolean isAtLeast8   =  password.length() >= 8;
 
-                    if( (!hasUppercase && !hasLowercase) || !isAtLeast8 || !hasSpecial )
-                        return false;
-                    
-                    return true;
-                }
-            })
+                        // return true if validation is successful, otherwise false
+                        return (hasUppercase && hasLowercase) && isAtLeast8;
+                    }
+                })
             .withHint("Password");
 ```
 
@@ -153,7 +152,7 @@ Not really... You can extend it to your needs
                     public boolean workInBackground(List<FormField> param) {
 
                         final String message = String.format(Locale.ENGLISH,
-                                "This form is finished and the values are: first field: %s - second field: %s  - third field: %s",
+                                "This form is doing work in background and the values are: first field: %s - second field: %s  - third field: %s",
                                 param.get(0).getInputFieldText(), param.get(1).getInputFieldText(), param.get(2).getInputFieldText()
                         );
 
@@ -168,7 +167,8 @@ Not really... You can extend it to your needs
                         Log.d("TAG", "Done");
                     }
                 })
-                .ready();
+            .withProcessingLabel("Sending")    
+            .ready();
 ```
 
 
@@ -182,13 +182,14 @@ FormField available methods
 | withHint  |  Add this form field's hint to let the user know what needs to be filled in. 																					| String  	 |
 | withIcon  |  Add this form field's icon for avisual cue of what needs to be filled in. 																					| Drawable/SVG   |
 | withLabel	|  Customize this form field's button label. Current default is "Next"																							| String     |
+| withProcessingLabel   | Changes the form's is label when its doing background work                                                                                        | String |
 | withCustomValidation |  Assign this FormField an unique validation 																										| IOnCustomValidation |
 
 
 
 
 ## Credits
-Thanks to [Josh Cummings][dribbble-profile] for the [UI][slick-form-page] inspiration  
+Thanks to [Josh Cummings][dribbble-profile] for the [UI][slick-form-page] design  
 Thanks to [Douglas Nassif Roma Junior][tooltip-library] for the awesome Tooltip Effect library	
 Thanks to [Georgi Eftimov][svg-library] for the SVG path view library	
 Thanks to [Perxis][perxis-link] for the SVG line icons
@@ -217,3 +218,4 @@ Thanks to [Perxis][perxis-link] for the SVG line icons
 [tooltip-library]: https://github.com/douglasjunior/android-simple-tooltip
 [svg-library]: https://github.com/geftimov/android-pathview
 [perxis-link]: https://perxis.com 
+[slick-form-demo]: https://raw.githubusercontent.com/AlburIvan/SlickForm/master/slick_form_demo.gif
