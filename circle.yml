@@ -1,0 +1,11 @@
+machine:
+    environment:
+
+dependencies:
+    override:
+        - chmod +x gradlew
+        - ./gradlew dependencies 
+
+test:
+  override:
+    - ./gradlew assembleDebug
