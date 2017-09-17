@@ -337,7 +337,7 @@ public class SlickForm extends LinearLayout {
      * Processes the form's end state and start callback methods to give control to the user.
      */
     private void processFormFieldEnd() {
-        slickFormSubmitButton.setText(!endTag.isEmpty() ? endTag : getResources().getText(R.string.form_field_progress) );
+        slickFormSubmitButton.setText(endTag != null ? endTag : getResources().getText(R.string.form_field_progress) );
         slickFieldContainer.setVisibility(View.GONE);
         slickFormProgressBar.setVisibility(View.VISIBLE);
 
