@@ -48,7 +48,7 @@ Step 2. Add the dependency
 
 In XML:
 ```xml
-<com.alburivan.slicksignform.SlickSignForm
+<com.alburivan.slickform.SlickForm
         android:id="@+id/slick_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
